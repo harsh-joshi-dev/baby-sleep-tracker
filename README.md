@@ -1,5 +1,11 @@
 # Sleep Pattern Learner
 
+A React Native (Expo) app for tracking baby sleep patterns and generating dynamic schedules with proactive local notifications and personalized coaching tips.
+
+## 📹 Demo Video
+
+Watch the app in action: **[Demo Video](https://drive.google.com/file/d/1Xg82oVWxqdWvCbzhKRMTR2t_mpQm2UaQ/view?usp=sharing)**
+
 ## Setup & Run
 
 ### Prerequisites
