@@ -93,6 +93,7 @@ export async function scheduleBlockNotifications(blocks: ScheduleBlock[]): Promi
 }
 
 export async function cancelAllNotifications(): Promise<void> {
+  // Cancel notifications tracked in memory
   for (const id of notificationIds) {
     try {
       await Notifications.cancelScheduledNotificationAsync(id);
@@ -101,6 +102,21 @@ export async function cancelAllNotifications(): Promise<void> {
     }
   }
 
+  // Also cancel all scheduled notifications from the OS (in case app was restarted)
+  try {
+    const allScheduled = await Notifications.getAllScheduledNotificationsAsync();
+    for (const notification of allScheduled) {
+      try {
+        await Notifications.cancelScheduledNotificationAsync(notification.identifier);
+      } catch (error) {
+        console.error('Failed to cancel OS notification:', error);
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get scheduled notifications:', error);
+  }
+
+  // Update notification log entries
   const schema = await loadStorage();
   const now = nowISO();
   for (const entry of schema.notificationLog) {

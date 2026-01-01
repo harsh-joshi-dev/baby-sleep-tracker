@@ -2,7 +2,7 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import { CoachTip, SleepSession, LearnerState } from '../types';
 import { getAgeBaseline } from '../utils/ageBaseline';
-import { minutesBetween, nowISO, isBefore, isAfter, getStartOfDay, getDaysDifference } from '../utils/timeUtils';
+import { minutesBetween, nowISO, isBefore, isAfter, getStartOfDay, getDaysDifference, formatDuration } from '../utils/timeUtils';
 
 const SHORT_NAP_THRESHOLD_MIN = 30;
 const LONG_WAKE_WINDOW_THRESHOLD_PCT = 1.2;
@@ -63,7 +63,7 @@ export function analyzeAndGenerateTips(
       type: 'longWakeWindow',
       severity: 'warning',
       title: 'Extended Wake Window',
-      message: `Wake window of ${longWakeWindow.minutes} minutes detected (target: ${Math.round(learner.ewmaWakeWindowMin)} minutes).`,
+      message: `Wake window of ${formatDuration(Math.round(longWakeWindow.minutes))} detected (target: ${formatDuration(learner.ewmaWakeWindowMin)}).`,
       rationale: `Extended wake windows can lead to overtiredness. Consider earlier wind-down.`,
       relatedSessionIds: longWakeWindow.sessionIds,
       createdAtISO: now,
@@ -77,7 +77,7 @@ export function analyzeAndGenerateTips(
       type: 'bedtimeShift',
       severity: 'info',
       title: 'Bedtime Shift Detected',
-      message: `Bedtime has shifted ${bedtimeShift.direction === 'earlier' ? 'earlier' : 'later'} by ${bedtimeShift.minutes} minutes.`,
+      message: `Bedtime has shifted ${bedtimeShift.direction === 'earlier' ? 'earlier' : 'later'} by ${formatDuration(Math.round(bedtimeShift.minutes))}.`,
       rationale: `Bedtime patterns are shifting. Monitor for consistency.`,
       relatedSessionIds: bedtimeShift.sessionIds,
       createdAtISO: now,
